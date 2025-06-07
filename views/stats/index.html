@@ -1,0 +1,32 @@
+<h1>📈 Weekly Working Hours</h1>
+<canvas id="weeklyChart" width="400" height="200"></canvas>
+
+<h1>📚 Topic-Based Time Distribution</h1>
+<canvas id="topicChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  fetch("/stats/weekly_hours")
+    .then(res => res.json())
+    .then(data => {
+      new Chart(document.getElementById("weeklyChart"), {
+        type: "bar",
+        data: {
+          labels: data.map(d => d.date),
+          datasets: [{ label: "Time", data: data.map(d => d.hours), backgroundColor: "blue" }]
+        }
+      });
+    });
+
+  fetch("/stats/topic_distribution")
+    .then(res => res.json())
+    .then(data => {
+      new Chart(document.getElementById("topicChart"), {
+        type: "pie",
+        data: {
+          labels: data.map(d => d.topic),
+          datasets: [{ data: data.map(d => d.total), backgroundColor: ["green", "orange", "purple"] }]
+        }
+      });
+    });
+</script>
